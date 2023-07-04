@@ -81,7 +81,18 @@ DRAW_BUTTON.addEventListener("click", event => {
 // Event listener para el botón "Sort" (Ordenar)
 SORT_BUTTON.addEventListener("click", event => {
   event.preventDefault();
-  // Ordenar las cartas en base a su valor numérico o letra
-  cards.sort((a, b) => a.item - b.item);
+  // Ordenar las cartas utilizando el algoritmo Selection Sort
+  for (let i = 0; i < cards.length - 1; i++) {
+    let minIndex = i;
+    for (let j = i + 1; j < cards.length; j++) {
+      // Comparar el valor numérico o letra de las cartas
+      if (cards[j].item < cards[minIndex].item) {
+        minIndex = j;
+      }
+    }
+    // Intercambiar las cartas en las posiciones i y minIndex
+    [cards[i], cards[minIndex]] = [cards[minIndex], cards[i]];
+  }
+
   drawCards(cards);
 });
