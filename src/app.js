@@ -12,6 +12,7 @@ const CARDS_INPUT = document.querySelector(".ncards");
 const DRAW_BUTTON = document.querySelector(".draw");
 const SORT_BUTTON = document.querySelector(".sort");
 const CARD_CONTAINER = document.querySelector(".card-container");
+const LOG_CONTAINER = document.querySelector(".log-entries");
 
 // Función para generar una nueva carta aleatoria
 function newCard() {
@@ -64,6 +65,28 @@ function drawCards(cards) {
   }
 }
 
+// Función para mostrar el log visual en el contenedor
+function logCardOrder(cards, iteration) {
+  const logEntry = document.createElement("div");
+  logEntry.classList.add("log-entry");
+
+  // Construir el HTML para mostrar las cartas en el log
+  const cardsHtml = cards
+    .map(
+      card => `
+      <div class="card">
+        <div class="top">${card.item} ${card.suit}</div>
+        <div class="suit">${card.suit}</div>
+        <div class="bottom">${card.item} ${card.suit}</div>
+      </div>
+    `
+    )
+    .join("");
+
+  logEntry.innerHTML = `<div class="log-iteration">Log ${iteration}:</div>${cardsHtml}`;
+  LOG_CONTAINER.appendChild(logEntry);
+}
+
 let cards = [];
 
 // Event listener para el botón "Draw" (Dibujar)
@@ -82,17 +105,20 @@ DRAW_BUTTON.addEventListener("click", event => {
 SORT_BUTTON.addEventListener("click", event => {
   event.preventDefault();
   // Ordenar las cartas utilizando el algoritmo Selection Sort
-  for (let i = 0; i < cards.length - 1; i++) {
+  const clonedCards = [...cards]; // Clone the cards array to preserve the original order
+  for (let i = 0; i < clonedCards.length - 1; i++) {
     let minIndex = i;
-    for (let j = i + 1; j < cards.length; j++) {
+    for (let j = i + 1; j < clonedCards.length; j++) {
       // Comparar el valor numérico o letra de las cartas
-      if (cards[j].item < cards[minIndex].item) {
+      if (clonedCards[j].item < clonedCards[minIndex].item) {
         minIndex = j;
       }
     }
     // Intercambiar las cartas en las posiciones i y minIndex
-    [cards[i], cards[minIndex]] = [cards[minIndex], cards[i]];
+    [clonedCards[i], clonedCards[minIndex]] = [
+      clonedCards[minIndex],
+      clonedCards[i]
+    ];
+    logCardOrder([...clonedCards], i + 1); // Log each iteration with a visual representation
   }
-
-  drawCards(cards);
 });
