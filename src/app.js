@@ -1,3 +1,5 @@
+// JS
+
 // Definición de los símbolos de las cartas
 const SYMBOL_CARD = ["♦", "♥", "♠", "♣"];
 
@@ -85,6 +87,11 @@ function logCardOrder(cards, iteration) {
 
   logEntry.innerHTML = `<div class="log-iteration">Log ${iteration}:</div>${cardsHtml}`;
   LOG_CONTAINER.appendChild(logEntry);
+
+  // Si el log visual se desborda, eliminar las entradas anteriores para mejorar el rendimiento
+  if (LOG_CONTAINER.children.length > 10) {
+    LOG_CONTAINER.removeChild(LOG_CONTAINER.children[0]);
+  }
 }
 
 let cards = [];
@@ -120,5 +127,14 @@ SORT_BUTTON.addEventListener("click", event => {
       clonedCards[i]
     ];
     logCardOrder([...clonedCards], i + 1); // Registrar cada iteración con una representación visual
+
+    // Detener el algoritmo si todas las cartas están ordenadas para mejorar el rendimiento
+    if (
+      clonedCards.every(
+        (card, index) => index === 0 || card.item >= clonedCards[index - 1].item
+      )
+    ) {
+      break;
+    }
   }
 });
