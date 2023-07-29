@@ -119,6 +119,6 @@ SORT_BUTTON.addEventListener("click", event => {
       clonedCards[minIndex],
       clonedCards[i]
     ];
-    logCardOrder([...clonedCards], i + 1); // Log each iteration with a visual representation
+    logCardOrder([...clonedCards], i + 1); // Registrar cada iteración con una representación visual
   }
 });
